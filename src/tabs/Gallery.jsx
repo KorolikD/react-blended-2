@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import * as ImageService from 'service/image-service';
 import { SearchForm, GaleryList, Text, Button } from 'components';
 import { Loader } from 'components/Loader/Loader';
+import { Modal } from 'components/modal/Modal';
 
 export const Gallery = () => {
   const [query, setQuery] = useState('');
@@ -14,6 +15,7 @@ export const Gallery = () => {
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(false);
   const [isLoadMore, setIsLoadMore] = useState(false);
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     if (!query) {
@@ -47,16 +49,21 @@ export const Gallery = () => {
     setPage(prev => prev + 1);
   };
 
+  const handleUrl = url => {
+    setUrl(url);
+  };
+
   return (
     <>
       <SearchForm onSubmit={handleSubmit} />
       {loader && <Loader />}
-      <GaleryList photos={photos} />
+      <GaleryList photos={photos} handleUrl={handleUrl} />
       {isEmpty && (
         <Text textAlign="center">Sorry. There are no images ... 😭</Text>
       )}
       {error && <Text textAlign="center">Sorry. {error} ... 😭</Text>}
       {isLoadMore && <Button onClick={loadMore}>Load more</Button>}
+      {url && <Modal url={url} handleUrl={handleUrl} />}
     </>
   );
 };
