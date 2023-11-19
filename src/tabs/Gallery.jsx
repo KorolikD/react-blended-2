@@ -15,7 +15,8 @@ export const Gallery = () => {
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(false);
   const [isLoadMore, setIsLoadMore] = useState(false);
-  const [url, setUrl] = useState('');
+  const [currentImg, setCurrentImg] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (!query) {
@@ -49,8 +50,9 @@ export const Gallery = () => {
     setPage(prev => prev + 1);
   };
 
-  const handleUrl = url => {
-    setUrl(url);
+  const handleUrl = index => {
+    setCurrentImg(index);
+    setShowModal(true);
   };
 
   return (
@@ -63,7 +65,13 @@ export const Gallery = () => {
       )}
       {error && <Text textAlign="center">Sorry. {error} ... 😭</Text>}
       {isLoadMore && <Button onClick={loadMore}>Load more</Button>}
-      {url && <Modal url={url} handleUrl={handleUrl} />}
+      {showModal && (
+        <Modal
+          currentImg={currentImg}
+          photos={photos}
+          setShowModal={setShowModal}
+        />
+      )}
     </>
   );
 };
